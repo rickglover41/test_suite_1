@@ -89,7 +89,6 @@ with st.sidebar.expander("ℹ️ Data & Calculation Notes", expanded=False):
 	except:
 		agency_fte = agency_fte
 		
-	# Light teal background and italicized text with proper paragraph spacing
 	st.markdown(
 		f"""
 		<div style="
@@ -98,9 +97,7 @@ with st.sidebar.expander("ℹ️ Data & Calculation Notes", expanded=False):
 			border-radius: 5px;
 			font-style: italic;
 			line-height: 1.5;">
-			<p>1. All rate and staffing information pulled from the Healthcare Cost Report Information System FY2023.  
-			The reported Agency FTE use ({agency_fte}) was used to estimate the RN need (assuming 80% of the Agency FTEs were RNs working 1872 hours annually).</p>
-
+			<p>1. All rate and staffing information pulled from the Healthcare Cost Report Information System FY2023. The reported Agency FTE use ({agency_fte}) was used to estimate the RN need (assuming 80% of the Agency FTEs were RNs working 1872 hours annually).</p>
 			<p>2. Estimated savings calculated using the current hospital staff labor rate plus the one-time Florence fee amortized over 3 years.</p>
 		</div>
 		""",
