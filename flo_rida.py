@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from flo_finance import flo_finance  # Direct import
+from flo_finance import flo_finance
 
 # -------------------------
 # Load CSVs
@@ -33,7 +33,8 @@ def styled_readonly(label, value):
 	st.markdown(
 		f"""
 		<div style="
-			background-color: #e8f0fe;
+			background-color: #cfe2f3;
+			color: black;
 			padding: 10px 12px;
 			border-radius: 5px;
 			margin-bottom: 8px;
@@ -85,36 +86,32 @@ for label, value in read_only_data.items():
 	styled_readonly(label, value)
 	
 # -------------------------
-# Editable inputs with $ prefix
+# Editable inputs with $ and commas
 # -------------------------
 st.subheader("Editable Inputs")
 
-# Staff Labor Rate
-col1, col2, col3 = st.columns([1,4,1])  # tiny col for $
-with col1:
-	st.write("$")
-with col2:
-	staff_rate = round(st.number_input(
-		"Staff Labor Rate", value=float(defaults["Staff_Labor_Rate"])
-	), 2)
-with col3:
-	st.write("")  # empty for spacing
+def dollar_input(label, value):
+	"""Input with $ and commas. Returns float."""
+	formatted_value = f"${value:,.2f}"
+	input_str = st.text_input(label, formatted_value)
+	# Remove $ and commas
+	numeric_str = input_str.replace("$", "").replace(",", "")
+	try:
+		return round(float(numeric_str), 2)
+	except:
+		return value
 	
-# Agency Labor Rate
-col1, col2, col3 = st.columns([1,4,1])
-with col1:
-	st.write("$")
-with col2:
-	agency_rate = round(st.number_input(
-		"Agency Labor Rate", value=float(defaults["Agency_Labor_Rate"])
-	), 2)
-with col3:
-	st.write("")
-	
-# Estimated RN Need (FTE)
-rn_needed = round(st.number_input(
-	"Estimated RN Need (FTE)", value=float(defaults["Estimated_RN_Need"])
-), 1)
+staff_rate = dollar_input("Staff Labor Rate", float(defaults["Staff_Labor_Rate"]))
+agency_rate = dollar_input("Agency Labor Rate", float(defaults["Agency_Labor_Rate"]))
+
+# Estimated RN Need (FTE) with 1 decimal
+rn_needed = st.number_input(
+	"Estimated RN Need (FTE)", 
+	value=float(defaults["Estimated_RN_Need"]),
+	step=0.1,
+	format="%.1f"
+)
+rn_needed = round(rn_needed, 1)
 
 # Small margin before model output
 st.markdown("<div style='margin-top:20px'></div>", unsafe_allow_html=True)
