@@ -33,10 +33,10 @@ def styled_readonly(label, value):
 	st.markdown(
 		f"""
 		<div style="
-			background-color: #f2f2f2;
-			padding: 8px 12px;
+			background-color: #e8f0fe;
+			padding: 10px 12px;
 			border-radius: 5px;
-			margin-bottom: 5px;
+			margin-bottom: 8px;
 			font-size: 16px;
 			word-wrap: break-word;">
 			<b>{label}:</b> {value}
@@ -85,20 +85,38 @@ for label, value in read_only_data.items():
 	styled_readonly(label, value)
 	
 # -------------------------
-# Editable inputs
+# Editable inputs with $ prefix
 # -------------------------
 st.subheader("Editable Inputs")
-staff_rate = round(st.number_input(
-	"Staff Labor Rate", value=float(defaults["Staff_Labor_Rate"])
-), 2)
-agency_rate = round(st.number_input(
-	"Agency Labor Rate", value=float(defaults["Agency_Labor_Rate"])
-), 2)
+
+# Staff Labor Rate
+col1, col2, col3 = st.columns([1,4,1])  # tiny col for $
+with col1:
+	st.write("$")
+with col2:
+	staff_rate = round(st.number_input(
+		"Staff Labor Rate", value=float(defaults["Staff_Labor_Rate"])
+	), 2)
+with col3:
+	st.write("")  # empty for spacing
+	
+# Agency Labor Rate
+col1, col2, col3 = st.columns([1,4,1])
+with col1:
+	st.write("$")
+with col2:
+	agency_rate = round(st.number_input(
+		"Agency Labor Rate", value=float(defaults["Agency_Labor_Rate"])
+	), 2)
+with col3:
+	st.write("")
+	
+# Estimated RN Need (FTE)
 rn_needed = round(st.number_input(
-	"Estimated RN Need", value=float(defaults["Estimated_RN_Need"])
+	"Estimated RN Need (FTE)", value=float(defaults["Estimated_RN_Need"])
 ), 1)
 
-# Add a small margin before model output
+# Small margin before model output
 st.markdown("<div style='margin-top:20px'></div>", unsafe_allow_html=True)
 
 # -------------------------
@@ -123,4 +141,3 @@ st.markdown(
 )
 
 
-	
