@@ -78,53 +78,49 @@ else:
 	}
 	
 # -------------------------
-# Layout: responsive columns
+# Display read-only info
 # -------------------------
-with st.container():
-	cols = st.columns([2, 2, 3])
+st.subheader("Information")
+for label, value in read_only_data.items():
+	styled_readonly(label, value)
 	
-	# Column 1: Read-only info
-	with cols[0]:
-		st.subheader("Information")
-		for label, value in read_only_data.items():
-			styled_readonly(label, value)
-			
-	# Column 2: Editable inputs
-	with cols[1]:
-		st.subheader("Editable Inputs")
-		staff_rate = st.number_input(
-			"Staff Labor Rate", 
-			value=float(defaults["Staff_Labor_Rate"]), 
-			format="$%.2f"
-		)
-		agency_rate = st.number_input(
-			"Agency Labor Rate", 
-			value=float(defaults["Agency_Labor_Rate"]), 
-			format="$%.2f"
-		)
-		rn_needed = round(st.number_input(
-			"Estimated RN Need", 
-			value=float(defaults["Estimated_RN_Need"])
-		), 1)
-		
-	# Column 3: Model output
-	with cols[2]:
-		st.subheader("🔮 Model Output")
-		result = flo_finance(staff_rate, agency_rate, rn_needed)
-		st.markdown(
-			f"""
-			<div style="
-				border: 1px solid #ddd;
-				border-radius: 8px;
-				padding: 15px;
-				font-size: 18px;
-				background-color: #f9f9f9;
-				word-wrap: break-word;">
-				<b>Model Result:</b> ${result:,.2f} <br>
-				<b>Inputs:</b> Staff Labor Rate: ${staff_rate:,.2f}, Agency Labor Rate: ${agency_rate:,.2f}, Estimated RN Need: {rn_needed:.1f}
-			</div>
-			""",
-			unsafe_allow_html=True
-		)
-		
-		
+# -------------------------
+# Editable inputs
+# -------------------------
+st.subheader("Editable Inputs")
+staff_rate = round(st.number_input(
+	"Staff Labor Rate", value=float(defaults["Staff_Labor_Rate"])
+), 2)
+agency_rate = round(st.number_input(
+	"Agency Labor Rate", value=float(defaults["Agency_Labor_Rate"])
+), 2)
+rn_needed = round(st.number_input(
+	"Estimated RN Need", value=float(defaults["Estimated_RN_Need"])
+), 1)
+
+# Add a small margin before model output
+st.markdown("<div style='margin-top:20px'></div>", unsafe_allow_html=True)
+
+# -------------------------
+# Model output
+# -------------------------
+st.subheader("🔮 Model Output")
+result = flo_finance(staff_rate, agency_rate, rn_needed)
+st.markdown(
+	f"""
+	<div style="
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		padding: 15px;
+		font-size: 18px;
+		background-color: #f9f9f9;
+		word-wrap: break-word;">
+		<b>Model Result:</b> ${result:,.2f} <br>
+		<b>Inputs:</b> Staff Labor Rate: ${staff_rate:,.2f}, Agency Labor Rate: ${agency_rate:,.2f}, Estimated RN Need: {rn_needed:.1f}
+	</div>
+	""",
+	unsafe_allow_html=True
+)
+
+
+	
