@@ -76,25 +76,12 @@ else:
 		"Hospital Name": defaults["Hospital_Name"],
 		"Bed Size": defaults["Bed_Size"],
 		"State": defaults["State"],
-		"Health Care Affiliation": defaults.get("Health_System_Name", "N/A")  # New field
+		"Health Care Affiliation": defaults.get("Health_System_Name", "N/A")
 	}
 	
 # -------------------------
-# Editable Inputs (Staffing)
+# RN Need Input (always present)
 # -------------------------
-st.subheader("Staffing* (Editable)")
-
-def dollar_input(label, value):
-	"""Input with $ and commas. Returns float."""
-	formatted_value = f"${value:,.2f}"
-	input_str = st.text_input(label, formatted_value)
-	numeric_str = input_str.replace("$", "").replace(",", "")
-	try:
-		return round(float(numeric_str), 2)
-	except:
-		return value
-	
-# RN Need Input (larger font for label and input)
 st.markdown(
 	"""
 	<label style="font-weight: bold; font-size: 20px;">Estimated RN Need (FTE)</label>
@@ -122,70 +109,96 @@ st.markdown(
 	unsafe_allow_html=True
 )
 
-# Staff and Agency Rates (normal font weight)
-staff_rate = st.number_input(
-	"Staff Labor Rate ($)",
-	value=float(defaults["Staff_Labor_Rate"]),
-	step=0.01,
-	format="%.2f"
-)
-agency_rate = st.number_input(
-	"Agency Labor Rate ($)",
-	value=float(defaults["Agency_Labor_Rate"]),
-	step=0.01,
-	format="%.2f"
-)
-
 # -------------------------
-# Model output
+# Conditional Display
 # -------------------------
-st.markdown(
-	"""
-	<div style="
-		border: 2px solid #444;
-		padding: 10px 12px;
-		border-radius: 5px;
-		margin-top: 20px;
-		margin-bottom: 10px;
-	">
-		<span style="font-weight: bold; font-size: 18px;">Florence Financial Savings</span>
-	</div>
-	""",
-	unsafe_allow_html=True
-)
+agency_gt_staff = str(defaults.get("Agency>Staff", True)).lower() == "true"
 
-result = flo_finance(staff_rate, agency_rate, rn_needed)
-
-st.markdown(
-	f"""
-	<div style="
-		background-color: #d4edda;
-		color: black;
-		padding: 15px 14px;
-		border-radius: 5px;
-		margin-bottom: 12px;
-		font-size: 20px;
-		font-weight: bold;
-		word-wrap: break-word;">
-		Estimated Financial Savings Over Standard Agency: ${result:,.2f}
-	</div>
-	<div style="
-		background-color: #d4edda;
-		color: black;
-		padding: 10px 12px;
-		border-radius: 5px;
-		margin-bottom: 8px;
-		font-size: 16px;
-		font-style: italic;
-		word-wrap: break-word;">
-		Inputs → Staff Labor Rate: ${staff_rate:,.2f}, Agency Labor Rate: ${agency_rate:,.2f}, Estimated RN Need: {rn_needed:.1f}
-	</div>
-	""",
-	unsafe_allow_html=True
-)
-
+if agency_gt_staff:
+	# Staffing* (Editable) section
+	st.subheader("Staffing* (Editable)")
+	
+	staff_rate = st.number_input(
+		"Staff Labor Rate ($)",
+		value=float(defaults["Staff_Labor_Rate"]),
+		step=0.01,
+		format="%.2f"
+	)
+	agency_rate = st.number_input(
+		"Agency Labor Rate ($)",
+		value=float(defaults["Agency_Labor_Rate"]),
+		step=0.01,
+		format="%.2f"
+	)
+	
+	# -------------------------
+	# Model output
+	# -------------------------
+	st.markdown(
+		"""
+		<div style="
+			border: 2px solid #444;
+			padding: 10px 12px;
+			border-radius: 5px;
+			margin-top: 20px;
+			margin-bottom: 10px;
+		">
+			<span style="font-weight: bold; font-size: 18px;">Florence Financial Savings</span>
+		</div>
+		""",
+		unsafe_allow_html=True
+	)
+	
+	result = flo_finance(staff_rate, agency_rate, rn_needed)
+	
+	st.markdown(
+		f"""
+		<div style="
+			background-color: #d4edda;
+			color: black;
+			padding: 15px 14px;
+			border-radius: 5px;
+			margin-bottom: 12px;
+			font-size: 20px;
+			font-weight: bold;
+			word-wrap: break-word;">
+			Estimated Financial Savings Over Standard Agency: ${result:,.2f}
+		</div>
+		<div style="
+			background-color: #d4edda;
+			color: black;
+			padding: 10px 12px;
+			border-radius: 5px;
+			margin-bottom: 8px;
+			font-size: 16px;
+			font-style: italic;
+			word-wrap: break-word;">
+			Inputs → Staff Labor Rate: ${staff_rate:,.2f}, Agency Labor Rate: ${agency_rate:,.2f}, Estimated RN Need: {rn_needed:.1f}
+		</div>
+		""",
+		unsafe_allow_html=True
+	)
+else:
+	# Agency>Staff is False → Show alternative message
+	st.markdown(
+		f"""
+		<div style="
+			font-weight: bold;
+			font-size: 22px;
+			margin-bottom: 12px;">
+			{rn_needed:.1f}
+		</div>
+		<div style="
+			font-size: 16px;
+			margin-bottom: 12px;">
+			For a one-time fee, Florence can fill your RN needs for 3 years, not just 12 weeks. Contact us today!
+		</div>
+		""",
+		unsafe_allow_html=True
+	)
+	
 # -------------------------
-# Information Section (moved below)
+# Information Section (always at bottom)
 # -------------------------
 st.subheader("Information")
 for label, value in read_only_data.items():
