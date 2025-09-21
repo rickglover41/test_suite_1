@@ -75,7 +75,8 @@ else:
 	read_only_data = {
 		"Hospital Name": defaults["Hospital_Name"],
 		"Bed Size": defaults["Bed_Size"],
-		"State": defaults["State"]
+		"State": defaults["State"],
+		"Health Care Affiliation": defaults.get("Health_System_Name", "N/A")  # New field
 	}
 	
 # -------------------------
