@@ -80,6 +80,20 @@ else:
 	}
 	
 # -------------------------
+# Sidebar with Notations
+# -------------------------
+with st.sidebar.expander("ℹ️ Data & Calculation Notes", expanded=False):
+	agency_fte = defaults.get("Agency_Labor_FTE", "N/A")
+	st.markdown(
+		f"""
+		1. All rate and staffing information pulled from the Healthcare Cost Report Information System FY2023.  
+		The reported Agency FTE use ({agency_fte}) was used to estimate the RN need (assuming 80% of the Agency FTEs were RNs working 1872 hours annually).
+
+		2. Estimated savings calculated using the current hospital staff labor rate plus the one-time Florence fee amortized over 3 years.
+		"""
+	)
+	
+# -------------------------
 # RN Need Display (always present)
 # -------------------------
 rn_needed = round(float(defaults.get("Estimated_RN_Need", 0)), 1)
