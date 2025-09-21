@@ -89,7 +89,7 @@ with st.sidebar.expander("ℹ️ Data & Calculation Notes", expanded=False):
 	except:
 		agency_fte = agency_fte
 		
-	# Light teal background and italicized text
+	# Light teal background and italicized text with proper paragraph spacing
 	st.markdown(
 		f"""
 		<div style="
@@ -98,11 +98,10 @@ with st.sidebar.expander("ℹ️ Data & Calculation Notes", expanded=False):
 			border-radius: 5px;
 			font-style: italic;
 			line-height: 1.5;">
-			1. All rate and staffing information pulled from the Healthcare Cost Report Information System FY2023.  
-			The reported Agency FTE use ({agency_fte}) was used to estimate the RN need (assuming 80% of the Agency FTEs were RNs working 1872 hours annually).
+			<p>1. All rate and staffing information pulled from the Healthcare Cost Report Information System FY2023.  
+			The reported Agency FTE use ({agency_fte}) was used to estimate the RN need (assuming 80% of the Agency FTEs were RNs working 1872 hours annually).</p>
 
-			<br><br>
-			2. Estimated savings calculated using the current hospital staff labor rate plus the one-time Florence fee amortized over 3 years.
+			<p>2. Estimated savings calculated using the current hospital staff labor rate plus the one-time Florence fee amortized over 3 years.</p>
 		</div>
 		""",
 		unsafe_allow_html=True
@@ -119,7 +118,7 @@ rn_needed = round(float(defaults.get("Estimated_RN_Need", 0)), 1)
 agency_gt_staff = str(defaults.get("Agency>Staff", True)).lower() == "true"
 
 if agency_gt_staff:
-	# Staffing* (Editable) section
+	# Staffing section
 	st.subheader("Current Rates/Staffing (Can Edit)")
 	
 	# RN Need Input (larger font for label and input)
@@ -164,9 +163,7 @@ if agency_gt_staff:
 		format="%.2f"
 	)
 	
-	# -------------------------
-	# Model output
-	# -------------------------
+	# Model output header
 	st.markdown(
 		"""
 		<div style="
@@ -183,6 +180,7 @@ if agency_gt_staff:
 	
 	result = flo_finance(staff_rate, agency_rate, rn_needed)
 	
+	# Model result and inputs
 	st.markdown(
 		f"""
 		<div style="
@@ -210,6 +208,7 @@ if agency_gt_staff:
 		""",
 		unsafe_allow_html=True
 	)
+	
 else:
 	# Agency>Staff is False → emphasize RN need and promotional message
 	st.markdown(
@@ -242,4 +241,5 @@ st.subheader("Information")
 for label, value in read_only_data.items():
 	styled_readonly(label, value)
 	
+
 	
