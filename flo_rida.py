@@ -57,7 +57,7 @@ if mode == "Health System":
 	
 	read_only_data = {
 		"Health System Name": defaults["Health_System_Name"],
-		"Bed Size": defaults["Bed_Size"],
+		"Bed Size": round(float(defaults["Bed_Size"])),
 		"States": defaults["State(s)"],
 		"Affiliated Hospitals": defaults["Affiliated_Hospitals"]
 	}
@@ -74,7 +74,7 @@ else:
 	
 	read_only_data = {
 		"Hospital Name": defaults["Hospital_Name"],
-		"Bed Size": defaults["Bed_Size"],
+		"Bed Size": round(float(defaults["Bed_Size"])),
 		"State": defaults["State"],
 		"Health Care Affiliation": defaults.get("Health_System_Name", "N/A")
 	}
@@ -84,13 +84,28 @@ else:
 # -------------------------
 with st.sidebar.expander("ℹ️ Data & Calculation Notes", expanded=False):
 	agency_fte = defaults.get("Agency_Labor_FTE", "N/A")
+	try:
+		agency_fte = round(float(agency_fte), 1)
+	except:
+		agency_fte = agency_fte
+		
+	# Light teal background and italicized text
 	st.markdown(
 		f"""
-		1. All rate and staffing information pulled from the Healthcare Cost Report Information System FY2023.  
-		The reported Agency FTE use ({agency_fte}) was used to estimate the RN need (assuming 80% of the Agency FTEs were RNs working 1872 hours annually).
+		<div style="
+			background-color: #b2dfdb;
+			padding: 10px;
+			border-radius: 5px;
+			font-style: italic;
+			line-height: 1.5;">
+			1. All rate and staffing information pulled from the Healthcare Cost Report Information System FY2023.  
+			The reported Agency FTE use ({agency_fte}) was used to estimate the RN need (assuming 80% of the Agency FTEs were RNs working 1872 hours annually).
 
-		2. Estimated savings calculated using the current hospital staff labor rate plus the one-time Florence fee amortized over 3 years.
-		"""
+			<br><br>
+			2. Estimated savings calculated using the current hospital staff labor rate plus the one-time Florence fee amortized over 3 years.
+		</div>
+		""",
+		unsafe_allow_html=True
 	)
 	
 # -------------------------
@@ -105,7 +120,7 @@ agency_gt_staff = str(defaults.get("Agency>Staff", True)).lower() == "true"
 
 if agency_gt_staff:
 	# Staffing* (Editable) section
-	st.subheader("Staffing* (Editable)")
+	st.subheader("Current Rates/Staffing (Can Edit)")
 	
 	# RN Need Input (larger font for label and input)
 	st.markdown(
@@ -227,5 +242,4 @@ st.subheader("Information")
 for label, value in read_only_data.items():
 	styled_readonly(label, value)
 	
-
 	
