@@ -86,7 +86,7 @@ for label, value in read_only_data.items():
 	styled_readonly(label, value)
 	
 # -------------------------
-# Editable inputs with $ and commas
+# Editable inputs
 # -------------------------
 st.subheader("Editable Inputs")
 
@@ -100,27 +100,65 @@ def dollar_input(label, value):
 	except:
 		return value
 	
-staff_rate = dollar_input("Staff Labor Rate", float(defaults["Staff_Labor_Rate"]))
-agency_rate = dollar_input("Agency Labor Rate", float(defaults["Agency_Labor_Rate"]))
-
-# Estimated RN Need (FTE) styled like $ inputs
+# Emphasized RN Need Input
+st.markdown(
+	f"""
+	<div style="
+		border: 2px solid #444;
+		padding: 8px 10px;
+		border-radius: 5px;
+		margin-bottom: 12px;
+	">
+		<label style="font-weight: bold; font-size: 18px;">Estimated RN Need (FTE)</label>
+	</div>
+	""",
+	unsafe_allow_html=True
+)
 rn_input_str = st.text_input(
-	"Estimated RN Need (FTE)", f"{float(defaults['Estimated_RN_Need']):.1f}"
+	"", f"{float(defaults['Estimated_RN_Need']):.1f}", label_visibility="collapsed"
 )
 try:
 	rn_needed = round(float(rn_input_str), 1)
 except:
 	rn_needed = round(float(defaults["Estimated_RN_Need"]), 1)
 	
+# Staff and Agency Rates
+staff_rate = dollar_input("Staff Labor Rate", float(defaults["Staff_Labor_Rate"]))
+agency_rate = dollar_input("Agency Labor Rate", float(defaults["Agency_Labor_Rate"]))
+
 # -------------------------
 # Model output
 # -------------------------
-st.subheader("🔮 Model Output")
+st.markdown(
+	"""
+	<div style="
+		border: 2px solid #444;
+		padding: 10px 12px;
+		border-radius: 5px;
+		margin-top: 20px;
+		margin-bottom: 10px;
+	">
+		<span style="font-weight: bold; font-size: 18px;">🔮 Model Output</span>
+	</div>
+	""",
+	unsafe_allow_html=True
+)
+
 result = flo_finance(staff_rate, agency_rate, rn_needed)
 
-# Styled like read-only fields
 st.markdown(
 	f"""
+	<div style="
+		background-color: #cfe2f3;
+		color: black;
+		padding: 15px 14px;
+		border-radius: 5px;
+		margin-bottom: 12px;
+		font-size: 20px;
+		font-weight: bold;
+		word-wrap: break-word;">
+		Model Result: ${result:,.2f}
+	</div>
 	<div style="
 		background-color: #cfe2f3;
 		color: black;
@@ -129,8 +167,7 @@ st.markdown(
 		margin-bottom: 8px;
 		font-size: 16px;
 		word-wrap: break-word;">
-		<b>Model Result:</b> ${result:,.2f} <br>
-		<b>Inputs:</b> Staff Labor Rate: ${staff_rate:,.2f}, Agency Labor Rate: ${agency_rate:,.2f}, Estimated RN Need: {rn_needed:.1f}
+		Inputs → Staff Labor Rate: ${staff_rate:,.2f}, Agency Labor Rate: ${agency_rate:,.2f}, Estimated RN Need: {rn_needed:.1f}
 	</div>
 	""",
 	unsafe_allow_html=True
