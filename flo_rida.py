@@ -100,17 +100,10 @@ def dollar_input(label, value):
 	except:
 		return value
 	
-# Emphasized RN Need Input
+# RN Need Input (no border, label slightly smaller)
 st.markdown(
 	"""
-	<div style="
-		border: 2px solid #444;
-		padding: 8px 10px;
-		border-radius: 5px;
-		margin-bottom: 12px;
-	">
-		<label style="font-weight: bold; font-size: 16px;">Estimated RN Need (FTE)</label>
-	</div>
+	<label style="font-weight: bold; font-size: 16px;">Estimated RN Need (FTE)</label>
 	""",
 	unsafe_allow_html=True
 )
@@ -122,7 +115,7 @@ try:
 except:
 	rn_needed = round(float(defaults["Estimated_RN_Need"]), 1)
 	
-# Apply bold + bigger font to RN input box
+# Bold + larger font for RN Need numeric input
 st.markdown(
 	"""
 	<style>
@@ -135,7 +128,7 @@ st.markdown(
 	unsafe_allow_html=True
 )
 
-# Staff and Agency Rates
+# Staff and Agency Rates (normal input styling)
 staff_rate = dollar_input("Staff Labor Rate", float(defaults["Staff_Labor_Rate"]))
 agency_rate = dollar_input("Agency Labor Rate", float(defaults["Agency_Labor_Rate"]))
 
