@@ -94,7 +94,6 @@ def dollar_input(label, value):
 	"""Input with $ and commas. Returns float."""
 	formatted_value = f"${value:,.2f}"
 	input_str = st.text_input(label, formatted_value)
-	# Remove $ and commas
 	numeric_str = input_str.replace("$", "").replace(",", "")
 	try:
 		return round(float(numeric_str), 2)
@@ -104,31 +103,31 @@ def dollar_input(label, value):
 staff_rate = dollar_input("Staff Labor Rate", float(defaults["Staff_Labor_Rate"]))
 agency_rate = dollar_input("Agency Labor Rate", float(defaults["Agency_Labor_Rate"]))
 
-# Estimated RN Need (FTE) with 1 decimal
-rn_needed = st.number_input(
-	"Estimated RN Need (FTE)", 
-	value=float(defaults["Estimated_RN_Need"]),
-	step=0.1,
-	format="%.1f"
+# Estimated RN Need (FTE) styled like $ inputs
+rn_input_str = st.text_input(
+	"Estimated RN Need (FTE)", f"{float(defaults['Estimated_RN_Need']):.1f}"
 )
-rn_needed = round(rn_needed, 1)
-
-# Small margin before model output
-st.markdown("<div style='margin-top:20px'></div>", unsafe_allow_html=True)
-
+try:
+	rn_needed = round(float(rn_input_str), 1)
+except:
+	rn_needed = round(float(defaults["Estimated_RN_Need"]), 1)
+	
 # -------------------------
 # Model output
 # -------------------------
 st.subheader("🔮 Model Output")
 result = flo_finance(staff_rate, agency_rate, rn_needed)
+
+# Styled like read-only fields
 st.markdown(
 	f"""
 	<div style="
-		border: 1px solid #ddd;
-		border-radius: 8px;
-		padding: 15px;
-		font-size: 18px;
-		background-color: #f9f9f9;
+		background-color: #cfe2f3;
+		color: black;
+		padding: 10px 12px;
+		border-radius: 5px;
+		margin-bottom: 8px;
+		font-size: 16px;
 		word-wrap: break-word;">
 		<b>Model Result:</b> ${result:,.2f} <br>
 		<b>Inputs:</b> Staff Labor Rate: ${staff_rate:,.2f}, Agency Labor Rate: ${agency_rate:,.2f}, Estimated RN Need: {rn_needed:.1f}
