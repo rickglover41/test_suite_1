@@ -79,16 +79,9 @@ else:
 	}
 	
 # -------------------------
-# Display read-only info
+# Editable Inputs (Staffing)
 # -------------------------
-st.subheader("Information")
-for label, value in read_only_data.items():
-	styled_readonly(label, value)
-	
-# -------------------------
-# Editable inputs
-# -------------------------
-st.subheader("Editable Inputs")
+st.subheader("Staffing* (Editable)")
 
 def dollar_input(label, value):
 	"""Input with $ and commas. Returns float."""
@@ -103,7 +96,7 @@ def dollar_input(label, value):
 # RN Need Input (larger font for label and input)
 st.markdown(
 	"""
-	<label style="font-weight: bold; font-size: 18px;">Estimated RN Need (FTE)</label>
+	<label style="font-weight: bold; font-size: 20px;">Estimated RN Need (FTE)</label>
 	""",
 	unsafe_allow_html=True
 )
@@ -115,7 +108,7 @@ try:
 except:
 	rn_needed = round(float(defaults["Estimated_RN_Need"]), 1)
 	
-# Apply bold + slightly larger font to RN Need numeric input
+# Bold + slightly larger font to RN Need numeric input
 st.markdown(
 	"""
 	<style>
@@ -190,4 +183,12 @@ st.markdown(
 	unsafe_allow_html=True
 )
 
+# -------------------------
+# Information Section (moved below)
+# -------------------------
+st.subheader("Information")
+for label, value in read_only_data.items():
+	styled_readonly(label, value)
+	
 
+	
