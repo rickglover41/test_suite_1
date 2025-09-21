@@ -102,14 +102,14 @@ def dollar_input(label, value):
 	
 # Emphasized RN Need Input
 st.markdown(
-	f"""
+	"""
 	<div style="
 		border: 2px solid #444;
 		padding: 8px 10px;
 		border-radius: 5px;
 		margin-bottom: 12px;
 	">
-		<label style="font-weight: bold; font-size: 18px;">Estimated RN Need (FTE)</label>
+		<label style="font-weight: bold; font-size: 16px;">Estimated RN Need (FTE)</label>
 	</div>
 	""",
 	unsafe_allow_html=True
@@ -122,6 +122,19 @@ try:
 except:
 	rn_needed = round(float(defaults["Estimated_RN_Need"]), 1)
 	
+# Apply bold + bigger font to RN input box
+st.markdown(
+	"""
+	<style>
+	input[type="text"] {
+		font-weight: bold !important;
+		font-size: 18px !important;
+	}
+	</style>
+	""",
+	unsafe_allow_html=True
+)
+
 # Staff and Agency Rates
 staff_rate = dollar_input("Staff Labor Rate", float(defaults["Staff_Labor_Rate"]))
 agency_rate = dollar_input("Agency Labor Rate", float(defaults["Agency_Labor_Rate"]))
@@ -138,7 +151,7 @@ st.markdown(
 		margin-top: 20px;
 		margin-bottom: 10px;
 	">
-		<span style="font-weight: bold; font-size: 18px;">🔮 Model Output</span>
+		<span style="font-weight: bold; font-size: 18px;">Florence Financial Savings</span>
 	</div>
 	""",
 	unsafe_allow_html=True
@@ -149,7 +162,7 @@ result = flo_finance(staff_rate, agency_rate, rn_needed)
 st.markdown(
 	f"""
 	<div style="
-		background-color: #cfe2f3;
+		background-color: #d4edda;
 		color: black;
 		padding: 15px 14px;
 		border-radius: 5px;
@@ -157,15 +170,16 @@ st.markdown(
 		font-size: 20px;
 		font-weight: bold;
 		word-wrap: break-word;">
-		Model Result: ${result:,.2f}
+		Estimated Financial Savings Over Standard Agency: ${result:,.2f}
 	</div>
 	<div style="
-		background-color: #cfe2f3;
+		background-color: #d4edda;
 		color: black;
 		padding: 10px 12px;
 		border-radius: 5px;
 		margin-bottom: 8px;
 		font-size: 16px;
+		font-style: italic;
 		word-wrap: break-word;">
 		Inputs → Staff Labor Rate: ${staff_rate:,.2f}, Agency Labor Rate: ${agency_rate:,.2f}, Estimated RN Need: {rn_needed:.1f}
 	</div>
