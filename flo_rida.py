@@ -80,37 +80,12 @@ else:
 	}
 	
 # -------------------------
-# RN Need Input (always present)
+# RN Need Display (always present)
 # -------------------------
-st.markdown(
-	"""
-	<label style="font-weight: bold; font-size: 20px;">Estimated RN Need (FTE)</label>
-	""",
-	unsafe_allow_html=True
-)
-rn_input_str = st.text_input(
-	"", f"{float(defaults['Estimated_RN_Need']):.1f}", label_visibility="collapsed"
-)
-try:
-	rn_needed = round(float(rn_input_str), 1)
-except:
-	rn_needed = round(float(defaults["Estimated_RN_Need"]), 1)
-	
-# Bold + slightly larger font to RN Need numeric input
-st.markdown(
-	"""
-	<style>
-	input[type="text"] {
-		font-weight: bold !important;
-		font-size: 20px !important;
-	}
-	</style>
-	""",
-	unsafe_allow_html=True
-)
+rn_needed = round(float(defaults.get("Estimated_RN_Need", 0)), 1)
 
 # -------------------------
-# Conditional Display
+# Conditional Display Based on Agency>Staff
 # -------------------------
 agency_gt_staff = str(defaults.get("Agency>Staff", True)).lower() == "true"
 
@@ -118,6 +93,35 @@ if agency_gt_staff:
 	# Staffing* (Editable) section
 	st.subheader("Staffing* (Editable)")
 	
+	# RN Need Input (larger font for label and input)
+	st.markdown(
+		"""
+		<label style="font-weight: bold; font-size: 20px;">Estimated RN Need (FTE)</label>
+		""",
+		unsafe_allow_html=True
+	)
+	rn_input_str = st.text_input(
+		"", f"{rn_needed:.1f}", label_visibility="collapsed"
+	)
+	try:
+		rn_needed = round(float(rn_input_str), 1)
+	except:
+		rn_needed = round(float(defaults["Estimated_RN_Need"]), 1)
+		
+	# Bold + slightly larger font for numeric input
+	st.markdown(
+		"""
+		<style>
+		input[type="text"] {
+			font-weight: bold !important;
+			font-size: 20px !important;
+		}
+		</style>
+		""",
+		unsafe_allow_html=True
+	)
+	
+	# Staff and Agency Rates (normal font weight)
 	staff_rate = st.number_input(
 		"Staff Labor Rate ($)",
 		value=float(defaults["Staff_Labor_Rate"]),
@@ -141,8 +145,7 @@ if agency_gt_staff:
 			padding: 10px 12px;
 			border-radius: 5px;
 			margin-top: 20px;
-			margin-bottom: 10px;
-		">
+			margin-bottom: 10px;">
 			<span style="font-weight: bold; font-size: 18px;">Florence Financial Savings</span>
 		</div>
 		""",
@@ -179,18 +182,24 @@ if agency_gt_staff:
 		unsafe_allow_html=True
 	)
 else:
-	# Agency>Staff is False → Show alternative message
+	# Agency>Staff is False → emphasize RN need and promotional message
 	st.markdown(
 		f"""
 		<div style="
 			font-weight: bold;
-			font-size: 22px;
-			margin-bottom: 12px;">
-			{rn_needed:.1f}
+			font-size: 28px;
+			color: #0b6623;
+			margin-bottom: 16px;">
+			Estimated RN Need: {rn_needed:.1f} FTEs
 		</div>
 		<div style="
-			font-size: 16px;
-			margin-bottom: 12px;">
+			font-size: 18px;
+			font-weight: bold;
+			color: #155724;
+			background-color: #d4edda;
+			padding: 12px;
+			border-radius: 5px;
+			line-height: 1.5;">
 			For a one-time fee, Florence can fill your RN needs for 3 years, not just 12 weeks. Contact us today!
 		</div>
 		""",
