@@ -121,7 +121,7 @@ if agency_gt_staff:
 	# RN Need Input (larger font for label and input)
 	st.markdown(
 		"""
-		<label style="font-weight: bold; font-size: 20px;">Estimated RN Need (FTE)</label>
+		<label style="font-weight: bold; font-size: 20px;">Estimated RN Need</label>
 		""",
 		unsafe_allow_html=True
 	)
@@ -215,7 +215,7 @@ else:
 			font-size: 28px;
 			color: #0b6623;
 			margin-bottom: 16px;">
-			Estimated RN Need: {rn_needed:.1f} FTEs
+			Estimated RN Need: {rn_needed:.1f}
 		</div>
 		<div style="
 			font-size: 18px;
