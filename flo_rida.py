@@ -3,6 +3,43 @@ import pandas as pd
 from flo_finance import flo_finance
 
 # -------------------------
+# Page Config (must come first)
+# -------------------------
+st.set_page_config(
+	page_title="Florence Financial Impact",
+	layout="wide",  # nice wide layout for desktop
+	initial_sidebar_state="collapsed"  # collapsed by default on mobile
+)
+
+# -------------------------
+# Global CSS (mobile friendly tweaks)
+# -------------------------
+st.markdown(
+	"""
+	<style>
+	/* Apply only on smaller screens */
+	@media (max-width: 768px) {
+		.block-container {
+			padding-left: 0.5rem !important;
+			padding-right: 0.5rem !important;
+		}
+		div[role="radiogroup"] label {
+			font-size: 14px !important;
+		}
+		div[data-testid="stMarkdownContainer"] {
+			font-size: 14px !important;
+		}
+		input[type="text"], input[type="number"] {
+			font-size: 14px !important;
+			padding: 4px !important;
+		}
+	}
+	</style>
+	""",
+	unsafe_allow_html=True
+)
+
+# -------------------------
 # Load CSVs
 # -------------------------
 @st.cache_data
@@ -25,7 +62,7 @@ hospitals = load_hospitals()
 # -------------------------
 st.title("Florence Financial Impact")
 st.caption("Note: If hospital or health system does not appear in the dropdown, there was no publicly reported Contracted Labor data to the HCRIS for that organization") 
-mode = st.radio("Search for Health System or Individual Hospital", ["Health System", "Individual Hospital"])
+mode = st.radio("Search for Health System or Hospital", ["Health System", "Individual Hospital"])
 
 # -------------------------
 # Function to display styled read-only fields
@@ -120,7 +157,6 @@ if agency_gt_staff:
 	# Staffing section
 	st.subheader("Current Rates/Staffing (Can Edit)")
 	
-	# RN Need Input (larger font for label and input)
 	st.markdown(
 		"""
 		<label style="font-weight: bold; font-size: 20px;">Estimated RN Need</label>
@@ -135,7 +171,6 @@ if agency_gt_staff:
 	except:
 		rn_needed = round(float(defaults["Estimated_RN_Need"]), 1)
 		
-	# Bold + slightly larger font for numeric input
 	st.markdown(
 		"""
 		<style>
@@ -148,7 +183,6 @@ if agency_gt_staff:
 		unsafe_allow_html=True
 	)
 	
-	# Staff and Agency Rates (normal font weight)
 	staff_rate = st.number_input(
 		"Staff Labor Rate ($)",
 		value=float(defaults["Staff_Labor_Rate"]),
@@ -162,7 +196,6 @@ if agency_gt_staff:
 		format="%.2f"
 	)
 	
-	# Model output header
 	st.markdown(
 		"""
 		<div style="
@@ -179,7 +212,6 @@ if agency_gt_staff:
 	
 	result = flo_finance(staff_rate, agency_rate, rn_needed)
 	
-	# Model result and inputs
 	st.markdown(
 		f"""
 		<div style="
@@ -209,7 +241,6 @@ if agency_gt_staff:
 	)
 	
 else:
-	# Agency>Staff is False → emphasize RN need and promotional message
 	st.markdown(
 		f"""
 		<div style="
