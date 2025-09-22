@@ -94,6 +94,7 @@ with st.sidebar.expander("ℹ️ Data & Calculation Notes", expanded=False):
 		f"""
 		<div style="
 			background-color: #b2dfdb;
+			color: black;
 			padding: 10px;
 			border-radius: 5px;
 			font-style: italic;
