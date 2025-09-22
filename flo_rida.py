@@ -25,7 +25,7 @@ hospitals = load_hospitals()
 # -------------------------
 st.title("Florence Financial Impact")
 st.caption("Note: If hospital or health system does not appear in the dropdown, there was no publicly reported Contracted Labor data to the HCRIS for that organization") 
-mode = st.radio("Select mode", ["Health System", "Individual Hospital"])
+mode = st.radio("Search for Health System or Hospital", ["Health System", "Individual Hospital"])
 
 # -------------------------
 # Function to display styled read-only fields
