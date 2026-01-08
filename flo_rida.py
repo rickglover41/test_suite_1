@@ -136,7 +136,7 @@ with st.sidebar.expander("ℹ️ Data & Calculation Notes", expanded=False):
 			border-radius: 5px;
 			font-style: italic;
 			line-height: 1.5;">
-			<p>1. All rate and staffing information pulled from the Healthcare Cost Report Information System (HCRIS) FY2023. The reported Agency FTE use ({agency_fte}) was used to estimate the RN need (assuming 80% of the Agency FTEs were RNs working 1872 hours annually).</p>
+			<p>1. All rate and staffing information pulled from the Healthcare Cost Report Information System (HCRIS) FY2024. The reported Agency FTE use ({agency_fte}) was used to estimate the RN need (assuming 80% of the Agency FTEs were RNs working 1872 hours annually).</p>
 			<p>2. Estimated savings is a 3 year calculation, measured using the difference between the current reported agency hourly rate and the one-time Florence fee amortized over that 3 year period added to the current reported staff hourly rate.</p>
 		</div>
 		""",
